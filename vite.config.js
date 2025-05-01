@@ -6,3 +6,5 @@ export default defineConfig({
   plugins: [react()],
   base:"https://EdgarGXI.github.io/front-pf"
 })
+
+
