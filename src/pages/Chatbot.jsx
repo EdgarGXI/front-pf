@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import ResourceCard from "../components/ResourceCard"
-import { Search } from "react-feather"
+import { Search, Paperclip } from "react-feather"
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -14,6 +14,9 @@ const Chatbot = () => {
   ])
   const [input, setInput] = useState("")
   const messagesEndRef = useRef(null)
+  const [uploadedFiles, setUploadedFiles] = useState([])
+  const fileInputRef = useRef(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const resources = [
     {
@@ -53,24 +56,218 @@ const Chatbot = () => {
     scrollToBottom()
   }, [messages])
 
-  const handleSendMessage = (e) => {
-    e.preventDefault()
-    if (!input.trim()) return
+  const handleFileSelect = (e) => {
+    const files = Array.from(e.target.files)
+    setUploadedFiles([...uploadedFiles, ...files])
 
-    // Add user message
-    const userMessage = { id: Date.now(), text: input, sender: "user" }
-    setMessages([...messages, userMessage])
-    setInput("")
+    console.log("Files selected:", files)
+  }
 
-    // Simulate bot response after a short delay
-    setTimeout(() => {
-      const botResponse = {
-        id: Date.now() + 1,
-        text: getBotResponse(input),
-        sender: "bot",
+  const triggerFileUpload = () => {
+    fileInputRef.current.click()
+  }
+
+  const processMammogramImage = async (file) => {
+    if (!file || !file.type.startsWith('image/')) {
+      return {
+        success: false,
+        message: "Please upload a valid image file"
       }
-      setMessages((prev) => [...prev, botResponse])
-    }, 1000)
+    }
+
+    setIsLoading(true)
+    
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      
+      // First check if the API is running
+      try {
+        const healthCheck = await fetch('http://127.0.0.1:8000/', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          }
+        })
+        
+        if (!healthCheck.ok) {
+          console.warn("API health check failed")
+        } else {
+          console.log("API health check succeeded")
+        }
+      } catch (error) {
+        console.error("API health check failed:", error)
+      }
+      
+      // Send the image to your FastAPI endpoint
+      console.log("Sending image to API...")
+      const response = await fetch('http://127.0.0.1:8000/predict/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          // Do not set Content-Type header when sending FormData
+          // The browser will set it including the boundary
+        },
+      })
+      
+      if (!response.ok) {
+        throw new Error(`API request failed with status: ${response.status}`)
+      }
+      
+      const data = await response.json()
+      console.log("API response received:", data)
+      
+      return {
+        success: true,
+        data: data,
+        message: "Image analysis complete"
+      }
+    } catch (error) {
+      console.error("Error processing image:", error)
+      return {
+        success: false,
+        message: `Error analyzing image: ${error.message}. Make sure the API server is running at http://127.0.0.1:8000`
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const getClassLabel = (classId) => {
+    // Map class IDs to labels based on your YOLO model's classes
+    const labels = {
+      0: "Malignant",
+      1: "Benign",
+      // Add more classes as needed
+    }
+    return labels[classId] || `Class ${classId}`
+  }
+
+  const renderPredictionResults = (data) => {
+    if (!data || !data.results) return "No prediction results available"
+    
+    // Extract prediction details
+    const predictions = data.results.map((pred, index) => {
+      const className = getClassLabel(pred.class)
+      const confidence = (pred.confidence * 100).toFixed(2)
+      
+      return `
+        <div class="prediction-item">
+          <strong>Finding ${index + 1}:</strong> ${className}
+          <br/>
+          <strong>Confidence:</strong> ${confidence}%
+        </div>
+      `
+    }).join('')
+    
+    // Create HTML with the image and predictions
+    return `
+      <div style="margin-top: 10px;">
+        <div style="margin-bottom: 10px;">
+          <img 
+            src="data:image/jpeg;base64,${data.annotated_image_base64}" 
+            alt="Annotated mammogram" 
+            style="max-width: 100%; border-radius: 8px; border: 1px solid #ddd;"
+          />
+        </div>
+        <div style="margin-top: 10px;">
+          <h4 style="font-weight: bold; margin-bottom: 5px;">Analysis Results:</h4>
+          ${predictions}
+        </div>
+        <div style="margin-top: 10px; color: #666; font-size: 0.8rem;">
+          <em>Note: This is an AI-assisted analysis and should be reviewed by a healthcare professional.</em>
+        </div>
+      </div>
+    `
+  }
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault()
+    
+    // Check if there's text input or files to process
+    if (!input.trim() && uploadedFiles.length === 0) return
+
+    // Create a variable to track whether we need to add any responses
+    let responseNeeded = false
+    
+    // Add user message if there's text input
+    if (input.trim()) {
+      const userMessage = { id: Date.now(), text: input, sender: "user" }
+      setMessages([...messages, userMessage])
+      responseNeeded = true
+    }
+    
+    // Process any uploaded images
+    if (uploadedFiles.length > 0) {
+      // Show a message indicating file upload
+      const fileMessage = { 
+        id: Date.now() + 1, 
+        text: `Uploading ${uploadedFiles.length} file(s) for analysis...`, 
+        sender: "user",
+        isFileUpload: true
+      }
+      setMessages(prev => [...prev, fileMessage])
+      
+      // Process each file
+                for (const file of uploadedFiles) {
+        // For now, we'll only process the first image file
+        if (file.type.startsWith('image/')) {
+          try {
+            const result = await processMammogramImage(file)
+            
+            let botResponse
+            if (result.success) {
+              botResponse = {
+                id: Date.now() + 2,
+                text: `<div>
+                  <p>I've analyzed the mammogram image:</p>
+                  ${renderPredictionResults(result.data)}
+                </div>`,
+                sender: "bot",
+                isHTML: true
+              }
+            } else {
+              botResponse = {
+                id: Date.now() + 2,
+                text: result.message,
+                sender: "bot"
+              }
+            }
+            
+            setMessages(prev => [...prev, botResponse])
+          } catch (error) {
+            console.error("Error during image processing:", error)
+            const errorResponse = {
+              id: Date.now() + 2,
+              text: `There was an error processing your image: ${error.message}. Please make sure the API server is running at http://127.0.0.1:8000`,
+              sender: "bot"
+            }
+            setMessages(prev => [...prev, errorResponse])
+          }
+          break // Only process one image for now
+        }
+      }
+      
+      // Clear the uploaded files after processing
+      setUploadedFiles([])
+      responseNeeded = false // We've already added responses for the files
+    }
+    
+    // Clear the input field
+    setInput("")
+    
+    // Only provide a chatbot response if text was entered and we need to respond to it
+    if (responseNeeded) {
+      // Simulate bot response after a short delay
+      setTimeout(() => {
+        const botResponse = {
+          id: Date.now() + 3,
+          text: getBotResponse(input),
+          sender: "bot",
+        }
+        setMessages(prev => [...prev, botResponse])
+      }, 1000)
+    }
   }
 
   const handleQuestionClick = (question) => {
@@ -90,9 +287,19 @@ const Chatbot = () => {
       return "Risk factors for breast cancer include being female, increasing age, personal or family history of breast cancer, inherited genes (BRCA1 and BRCA2), radiation exposure, obesity, beginning periods before age 12, starting menopause after age 55, having first child after age 30, and hormone therapy."
     } else if (input.includes("screening")) {
       return "Recommended screening methods include regular mammograms (typically starting at age 40-50 depending on guidelines), clinical breast exams by a healthcare provider, and breast self-awareness. High-risk individuals may need additional screening like MRI."
+    } else if (input.includes("detection") || input.includes("analyze") || input.includes("mammogram")) {
+      return "You can upload a mammogram image using the paperclip icon, and I'll analyze it using our AI detection system. Please note that this analysis is for informational purposes only and should be reviewed by a healthcare professional."
     } else {
-      return "I'm here to provide information about breast cancer. You can ask about symptoms, diagnosis, risk factors, screening methods, treatment options, or support resources. How can I help you today?"
+      return "I'm here to provide information about breast cancer. You can ask about symptoms, diagnosis, risk factors, screening methods, treatment options, or support resources. You can also upload a mammogram image for AI-assisted analysis. How can I help you today?"
     }
+  }
+
+  // Custom component to render messages with HTML content
+  const MessageContent = ({ message }) => {
+    if (message.isHTML) {
+      return <div dangerouslySetInnerHTML={{ __html: message.text }} />
+    }
+    return <div>{message.text}</div>
   }
 
   return (
@@ -100,6 +307,16 @@ const Chatbot = () => {
       <header className="bg-white p-4 shadow-sm">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary">Breast Cancer Information Assistant</h1>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search something here..."
+              className="w-64 px-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none"
+            />
+            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <Search size={16} />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -112,9 +329,19 @@ const Chatbot = () => {
                   key={message.id}
                   className={`chat-message ${message.sender === "user" ? "user-message" : "bot-message"}`}
                 >
-                  {message.text}
+                  <MessageContent message={message} />
                 </div>
               ))}
+              {isLoading && (
+                <div className="chat-message bot-message">
+                  <div className="flex items-center">
+                    <div className="w-2 h-2 bg-primary rounded-full mr-1 animate-pulse"></div>
+                    <div className="w-2 h-2 bg-primary rounded-full mr-1 animate-pulse" style={{ animationDelay: "0.2s" }}></div>
+                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{ animationDelay: "0.4s" }}></div>
+                    <span className="ml-2 text-sm text-gray-500">Analyzing image...</span>
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
           </div>
@@ -133,20 +360,58 @@ const Chatbot = () => {
               ))}
             </div>
 
+            {uploadedFiles.length > 0 && (
+              <div className="mb-3">
+                <p className="text-sm text-gray-600 mb-2">Attached files:</p>
+                <div className="flex flex-wrap gap-2">
+                  {uploadedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center bg-gray-100 rounded-full px-3 py-1 text-sm">
+                      <span className="truncate max-w-[150px]">{file.name}</span>
+                      <button
+                        className="ml-2 text-gray-500 hover:text-red-500"
+                        onClick={() => setUploadedFiles(uploadedFiles.filter((_, i) => i !== index))}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <form onSubmit={handleSendMessage} className="flex gap-2">
-              <input
-                id="chat-input"
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about breast cancer..."
-                className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
+              <div className="relative flex-1">
+                <input
+                  id="chat-input"
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask about breast cancer or upload a mammogram..."
+                  className="w-full p-2 pl-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <button
+                  type="button"
+                  onClick={triggerFileUpload}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+                >
+                  <Paperclip size={18} />
+                </button>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileSelect} 
+                  className="hidden" 
+                  accept="image/*"
+                />
+              </div>
               <button
                 type="submit"
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition"
+                disabled={isLoading}
+                className={`${
+                  isLoading ? "bg-gray-400" : "bg-primary hover:bg-primary-dark"
+                } text-white px-4 py-2 rounded-lg transition`}
               >
-                Send
+                {isLoading ? "Processing..." : "Send"}
               </button>
             </form>
           </div>
