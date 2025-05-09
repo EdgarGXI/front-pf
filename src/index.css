@@ -10,10 +10,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* Define CSS variables for colors */
-  --primary: 271 81% 38%;
-  --primary-foreground: 0 0% 100%;
 }
 
 body {
@@ -22,18 +18,12 @@ body {
   min-height: 100vh;
 }
 
+#root {
+  height: 100vh;
+  width: 100%;
+}
+
 /* Custom component classes */
-.sidebar-icon {
-  @apply relative flex items-center justify-center h-12 w-12 mt-2 mb-2 mx-auto shadow-lg 
-  bg-primary text-white hover:bg-primary-light hover:text-white
-  rounded-3xl hover:rounded-xl transition-all duration-300 ease-linear cursor-pointer;
-}
-
-.sidebar-tooltip {
-  @apply absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md
-  text-white bg-primary-dark text-xs font-bold transition-all duration-100 scale-0 origin-left;
-}
-
 .chat-message {
   @apply p-4 rounded-lg max-w-[80%] mb-4;
 }

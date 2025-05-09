@@ -5,31 +5,36 @@ import { MessageSquare, BarChart2, Info, Settings, HelpCircle } from "react-feat
 
 const Sidebar = ({ activeTab, setActiveTab }) => {
   return (
-    <div className="flex flex-col items-center w-16 h-screen py-8 bg-primary">
-      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white mb-6">
-        <span className="text-primary font-bold text-xl">BC</span>
+    <div className="flex flex-col w-[130px] h-screen py-6 bg-primary text-white">
+      <div className="flex items-center px-4 mb-8">
+        <div className="w-8 h-8 mr-2 rounded-full bg-white flex items-center justify-center">
+          <span className="text-primary font-bold text-xl">BC</span>
+        </div>
+        <span className="font-bold text-xl">BCIA</span>
       </div>
 
-      <SidebarIcon
-        icon={<MessageSquare size={20} />}
-        text="Chatbot"
-        active={activeTab === "chatbot"}
-        onClick={() => setActiveTab("chatbot")}
-        to="/chatbot"
-      />
+      <div className="flex-1 flex flex-col space-y-1">
+        <SidebarIcon
+          icon={<MessageSquare size={20} />}
+          text="Chatbot"
+          active={activeTab === "chatbot"}
+          onClick={() => setActiveTab("chatbot")}
+          to="/chatbot"
+        />
 
-      <SidebarIcon
-        icon={<BarChart2 size={20} />}
-        text="Dashboard"
-        active={activeTab === "dashboard"}
-        onClick={() => setActiveTab("dashboard")}
-        to="/dashboard"
-      />
+        <SidebarIcon
+          icon={<BarChart2 size={20} />}
+          text="Dashboard"
+          active={activeTab === "dashboard"}
+          onClick={() => setActiveTab("dashboard")}
+          to="/dashboard"
+        />
 
-      <div className="mt-auto">
-        <SidebarIcon icon={<Info size={20} />} text="About" />
-        <SidebarIcon icon={<HelpCircle size={20} />} text="Help" />
-        <SidebarIcon icon={<Settings size={20} />} text="Settings" />
+        <div className="mt-auto">
+          <SidebarIcon icon={<Info size={20} />} text="About" />
+          <SidebarIcon icon={<HelpCircle size={20} />} text="Help" />
+          <SidebarIcon icon={<Settings size={20} />} text="Settings" />
+        </div>
       </div>
     </div>
   )
@@ -37,20 +42,21 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
 
 const SidebarIcon = ({ icon, text, active = false, onClick, to }) => {
   const content = (
-    <>
-      <div className={`sidebar-icon ${active ? "bg-primary-light rounded-xl" : ""}`} onClick={onClick}>
-        {icon}
-        <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
-      </div>
-    </>
+    <div
+      className={`flex items-center px-4 py-3 ${active ? "bg-primary-dark" : ""} hover:bg-primary-dark transition-colors cursor-pointer`}
+      onClick={onClick}
+    >
+      <div className="mr-3">{icon}</div>
+      <span className="text-sm">{text}</span>
+    </div>
   )
 
   return to ? (
-    <Link to={to} className="group">
+    <Link to={to} className="w-full">
       {content}
     </Link>
   ) : (
-    <div className="group">{content}</div>
+    <div className="w-full">{content}</div>
   )
 }
 
