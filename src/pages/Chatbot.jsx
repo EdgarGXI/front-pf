@@ -100,16 +100,6 @@ const Chatbot = () => {
       <header className="bg-white p-4 shadow-sm">
         <div className="flex justify-between items-center">
           <h1 className="text-2xl font-bold text-primary">Breast Cancer Information Assistant</h1>
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search something here..."
-              className="w-64 px-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none"
-            />
-            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-              <Search size={16} />
-            </button>
-          </div>
         </div>
       </header>
 
