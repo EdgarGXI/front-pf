@@ -54,7 +54,7 @@ import {
     return (
       <div className="p-6">
         <header className="mb-8">
-          <h1 className="text-3xl font-bold text-primary">Breast Cancer Detection Dashboard</h1>
+          <h1 className="text-3xl font-bold text-primary"> Dashboard</h1>
           <p className="text-gray-600">Technical metrics and project performance analytics</p>
         </header>
   
