@@ -56,9 +56,7 @@ module.exports = {
         md: "0.375rem",
         sm: "0.25rem",
       },
-      fontFamily: {
-        sans: ["system-ui", "Avenir", "Helvetica", "Arial", "sans-serif"],
-      },
+     
     },
   },
   plugins: [],
