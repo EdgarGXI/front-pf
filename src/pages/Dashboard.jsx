@@ -251,7 +251,7 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">True Negatives</span>
                         <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
-                          21.9%%
+                          21.9%
                         </span>
                       </div>
                       <div className="text-2xl font-bold text-blue-700">325</div>
