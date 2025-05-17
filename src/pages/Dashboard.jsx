@@ -2,6 +2,10 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import reportImg from '../imgs/report.jpg';
+import matrixImg from '../imgs/matrix.jpeg';
+
+
 import {
   BarChart3,
   PieChart,
@@ -30,12 +34,12 @@ export default function ProjectInformation() {
   return (
     <div className="w-full max-w-6xl mx-auto px-4 py-8 bg-gradient-to-b ">
       <div className="mb-10 text-center">
-        <h1 className="text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
           Breast Cancer Detection Model
         </h1>
         <div className="flex items-center justify-center gap-2 mb-4">
           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500 text-white">
-            94.8% Accuracy
+            75% Accuracy
           </span>
           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-500 text-white">
             Validated
@@ -52,22 +56,20 @@ export default function ProjectInformation() {
         <div className="grid w-full max-w-md mx-auto grid-cols-2 mb-8 rounded-lg overflow-hidden border">
           <button
             onClick={() => setActiveTab("cards")}
-            className={`text-base py-3 flex items-center justify-center ${
-              activeTab === "cards"
-                ? "bg-white text-gray-900 border-b-2 border-blue-500"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-            }`}
+            className={`text-base py-3 flex items-center justify-center ${activeTab === "cards"
+              ? "bg-white text-gray-900 border-b-2 border-blue-500"
+              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+              }`}
           >
             <BarChart3 className="mr-2 h-4 w-4" />
             Performance Metrics
           </button>
           <button
             onClick={() => setActiveTab("detailed")}
-            className={`text-base py-3 flex items-center justify-center ${
-              activeTab === "detailed"
-                ? "bg-white text-gray-900 border-b-2 border-blue-500"
-                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-            }`}
+            className={`text-base py-3 flex items-center justify-center ${activeTab === "detailed"
+              ? "bg-white text-gray-900 border-b-2 border-blue-500"
+              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+              }`}
           >
             <PieChart className="mr-2 h-4 w-4" />
             Detailed Analysis
@@ -79,7 +81,7 @@ export default function ProjectInformation() {
           <div className="mt-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Validation Metrics Card */}
-              <div className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-xl">
+              <div className=" flex flex-col justify-between overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-xl">
                 <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-600"></div>
                 <div className="pb-2 border-b p-6">
                   <div className="flex justify-between items-center">
@@ -100,7 +102,7 @@ export default function ProjectInformation() {
                   <div className="grid grid-cols-2 gap-6 mb-6">
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Accuracy</div>
-                      <div className="text-3xl font-bold text-blue-700">94.8%</div>
+                      <div className="text-3xl font-bold text-blue-700">75%</div>
                       <div className="mt-2 flex items-center text-xs text-green-600">
                         <TrendingUp className="h-3 w-3 mr-1" />
                         <span>+2.3% from baseline</span>
@@ -109,7 +111,7 @@ export default function ProjectInformation() {
 
                     <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Precision</div>
-                      <div className="text-3xl font-bold text-purple-700">92.3%</div>
+                      <div className="text-3xl font-bold text-purple-700">85%</div>
                       <div className="mt-2 flex items-center text-xs text-green-600">
                         <TrendingUp className="h-3 w-3 mr-1" />
                         <span>+1.8% from baseline</span>
@@ -118,7 +120,7 @@ export default function ProjectInformation() {
 
                     <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-4 rounded-xl border border-pink-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Recall</div>
-                      <div className="text-3xl font-bold text-pink-700">95.1%</div>
+                      <div className="text-3xl font-bold text-pink-700">75%</div>
                       <div className="mt-2 flex items-center text-xs text-green-600">
                         <TrendingUp className="h-3 w-3 mr-1" />
                         <span>+3.2% from baseline</span>
@@ -127,7 +129,7 @@ export default function ProjectInformation() {
 
                     <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-xl border border-amber-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">F1 Score</div>
-                      <div className="text-3xl font-bold text-amber-700">93.7%</div>
+                      <div className="text-3xl font-bold text-amber-700">76%</div>
                       <div className="mt-2 flex items-center text-xs text-green-600">
                         <TrendingUp className="h-3 w-3 mr-1" />
                         <span>+2.5% from baseline</span>
@@ -139,12 +141,12 @@ export default function ProjectInformation() {
                     <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
                       <h4 className="font-medium text-gray-700 flex items-center">
                         <LineChart className="h-4 w-4 mr-2 text-blue-600" />
-                        Performance Across Validation Folds
+                        Classification Report
                       </h4>
                     </div>
-                    <div className="p-4 bg-white">
+                    <div className="p-2 bg-white">
                       <img
-                        src="/images/metrics-chart.png"
+                        src={reportImg}
                         alt="Validation metrics chart"
                         className="w-full h-auto rounded-lg"
                       />
@@ -152,12 +154,12 @@ export default function ProjectInformation() {
                   </div>
                 </div>
 
-                <div className="bg-gray-50 border-t px-6 py-4">
+                <div className=" bg-gray-50 border-t px-6 py-4">
                   <div className="w-full flex justify-between items-center text-sm text-gray-500">
                     <span>Last updated: May 15, 2025</span>
                     <span className="flex items-center">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mr-1" />
-                      Validated by clinical experts
+                      Validated by Universidad del Norte
                     </span>
                   </div>
                 </div>
@@ -189,21 +191,14 @@ export default function ProjectInformation() {
                       </div>
                       <div className="p-4 bg-white">
                         <img
-                          src="/images/confusion-matrix.png"
+                          src={matrixImg}
                           alt="Confusion matrix"
                           className="w-full h-auto rounded-lg"
                         />
                       </div>
                     </div>
 
-                    <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                      <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                        <h4 className="font-medium text-gray-700">ROC Curve Analysis</h4>
-                      </div>
-                      <div className="p-4 bg-white">
-                        <img src="/images/roc-curve.png" alt="ROC curve" className="w-full h-auto rounded-lg" />
-                      </div>
-                    </div>
+                   
                   </div>
 
                   <div className="grid grid-cols-2 gap-6">
@@ -211,13 +206,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">True Positives</span>
                         <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
-                          42.3%
+                          52.7%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-green-700">423</div>
+                      <div className="text-2xl font-bold text-green-700">783</div>
                       <div className="mt-2">
                         <div className="w-full bg-green-100 rounded-full h-2">
-                          <div className="bg-green-500 h-2 rounded-full" style={{ width: "42.3%" }}></div>
+                          <div className="bg-green-500 h-2 rounded-full" style={{ width: " 52.7%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -226,13 +221,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">False Positives</span>
                         <span className="text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
-                          3.5%
+                          23.4%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-red-700">35</div>
+                      <div className="text-2xl font-bold text-red-700">348</div>
                       <div className="mt-2">
                         <div className="w-full bg-red-100 rounded-full h-2">
-                          <div className="bg-red-500 h-2 rounded-full" style={{ width: "3.5%" }}></div>
+                          <div className="bg-red-500 h-2 rounded-full" style={{ width: "23.4%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -241,13 +236,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">False Negatives</span>
                         <span className="text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
-                          2.2%
+                          2.0%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-amber-700">22</div>
+                      <div className="text-2xl font-bold text-amber-700">29</div>
                       <div className="mt-2">
                         <div className="w-full bg-amber-100 rounded-full h-2">
-                          <div className="bg-amber-500 h-2 rounded-full" style={{ width: "2.2%" }}></div>
+                          <div className="bg-amber-500 h-2 rounded-full" style={{ width: "2.0%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -256,13 +251,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">True Negatives</span>
                         <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
-                          52.0%
+                          21.9%%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-blue-700">520</div>
+                      <div className="text-2xl font-bold text-blue-700">325</div>
                       <div className="mt-2">
                         <div className="w-full bg-blue-100 rounded-full h-2">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "52%" }}></div>
+                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "21.9%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -271,10 +266,10 @@ export default function ProjectInformation() {
 
                 <div className="bg-gray-50 border-t px-6 py-4">
                   <div className="w-full flex justify-between items-center text-sm text-gray-500">
-                    <span>Total samples: 1,000</span>
+                    <span>Total samples: 1,485</span>
                     <span className="flex items-center">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mr-1" />
-                      96.5% overall accuracy
+                      75% overall accuracy
                     </span>
                   </div>
                 </div>
@@ -304,7 +299,7 @@ export default function ProjectInformation() {
                         </div>
                         <span className="font-medium text-purple-900">Model Architecture</span>
                         <span className="inline-flex items-center rounded-md border border-purple-300 bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 ml-2">
-                          CNN
+                          Yolov8l
                         </span>
                       </div>
                       {expandedSection === "architecture" ? (
@@ -325,9 +320,8 @@ export default function ProjectInformation() {
                     >
                       <div className="p-6 border-t border-purple-200 bg-white">
                         <p className="text-gray-700">
-                          Our breast cancer detection model uses a convolutional neural network (CNN) architecture
-                          optimized for medical image analysis. The model was trained on a dataset of 10,000 mammogram
-                          images with verified diagnoses.
+                          Our breast cancer detection model is based on the YOLOv8-L architecture, specifically designed for object detection tasks in medical imaging. The model was trained for <strong> 128 </strong> epochs using the VinDr-Mammo dataset,
+                          which includes <strong> 5,000</strong> annotated mammogram images from real breast cancer cases.
                         </p>
                       </div>
                     </motion.div>
@@ -344,7 +338,7 @@ export default function ProjectInformation() {
                         </div>
                         <span className="font-medium text-blue-900">Data Sources</span>
                         <span className="inline-flex items-center rounded-md border border-blue-300 bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 ml-2">
-                          10,000 Images
+                          5,000 Images
                         </span>
                       </div>
                       {expandedSection === "data" ? (
@@ -365,9 +359,14 @@ export default function ProjectInformation() {
                     >
                       <div className="p-6 border-t border-blue-200 bg-white">
                         <p className="text-gray-700">
-                          The training data was sourced from multiple medical institutions with proper anonymization and
-                          consent. The dataset includes diverse demographics to ensure the model performs well across
-                          different populations.
+                          <p>
+                            The <strong>VinDr-Mammo</strong> dataset was used, containing 5,000 mammograms with double readings and arbitration
+                            by a third radiologist to ensure diagnostic accuracy.
+                            From this dataset, <strong>1,659 cases</strong> were selected: <strong>1,363</strong> with masses or calcifications rated BI-RADS &gt; 3,
+                            and <strong>296</strong> with no detectable abnormalities.
+                          </p>
+
+
                         </p>
                       </div>
                     </motion.div>
@@ -384,7 +383,7 @@ export default function ProjectInformation() {
                         </div>
                         <span className="font-medium text-green-900">Validation Process</span>
                         <span className="inline-flex items-center rounded-md border border-green-300 bg-green-100 px-2 py-1 text-xs font-medium text-green-700 ml-2">
-                          5-Fold CV
+                          Split
                         </span>
                       </div>
                       {expandedSection === "validation" ? (
@@ -405,9 +404,14 @@ export default function ProjectInformation() {
                     >
                       <div className="p-6 border-t border-green-200 bg-white">
                         <p className="text-gray-700">
-                          The model underwent rigorous validation using 5-fold cross-validation and was tested on an
-                          independent test set of 400 images not seen during training. Results were reviewed by a panel
-                          of radiologists.
+                          <p>
+                            The dataset was split into <strong>70%</strong> for training, <strong>15%</strong>
+                            for validation during training, and <strong>15%</strong> for final testing. 
+                            The validation set was used to tune model performance and prevent overfitting, 
+                            while the test set was reserved for evaluating the model's generalization after training.
+                          </p>
+
+                          .
                         </p>
                       </div>
                     </motion.div>

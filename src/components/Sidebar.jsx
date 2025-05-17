@@ -13,11 +13,9 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
         </div>
       </div>
 
-      {/* Divider */}
-      <div className="mx-4 my-4 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
 
       {/* Navigation Icons */}
-      <div className="flex-1 flex flex-col items-center px-2 py-4 space-y-4">
+      <div className="pt-20 flex-1 flex flex-col items-center px-2 py-4 space-y-4 ">
      
 
         <SidebarIcon
@@ -43,26 +41,17 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           onClick={() => setActiveTab("community")}
           to="https://www.breastcancer.org/es"
         />
-      </div>
 
-      {/* Bottom Icons */}
-      <div className="px-2 py-6 flex flex-col items-center space-y-4 border-t border-gray-100">
-        <SidebarIcon
-          icon={<Settings size={20} />}
-          tooltip="Settings"
-          active={activeTab === "settings"}
-          onClick={() => setActiveTab("settings")}
-          to="/settings"
-        />
-
-        <SidebarIcon
+         <SidebarIcon
           icon={<Info size={20} />}
           tooltip="About"
           active={activeTab === "about"}
           onClick={() => setActiveTab("about")}
           to="/about"
-        />
+            />
       </div>
+
+    
     </div>
   )
 }
