@@ -1,7 +1,6 @@
-"use client"
-import { Link } from "react-router-dom"
+"use client";
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect } from "react";
 import {
   Search,
   Paperclip,
@@ -13,7 +12,7 @@ import {
   Users,
   Settings,
   ChevronRight,
-} from "lucide-react"
+} from "lucide-react";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([
@@ -22,59 +21,63 @@ const Chatbot = () => {
       text: "Hello, I can provide general information about breast cancer. What would you like to know? Remember, I'm not a substitute for professional medical advice.",
       sender: "bot",
     },
-  ])
-  const [input, setInput] = useState("")
-  const messagesEndRef = useRef(null)
-  const [uploadedFiles, setUploadedFiles] = useState([])
-  const fileInputRef = useRef(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState("chat")
+  ]);
+  const [input, setInput] = useState("");
+  const messagesEndRef = useRef(null);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const fileInputRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("chat");
 
   const resources = [
     {
       title: "Screening Information",
-      description: "Learn about mammograms and other screening methods for early detection",
+      description:
+        "Learn about mammograms and other screening methods for early detection",
       icon: "📋",
       link: "https://www.mayoclinic.org/diseases-conditions/breast-cancer/diagnosis-treatment/drc-20352475#:~:text=During%20a%20clinical%20breast%20exam,around%20the%20armpits%20for%20lumps.",
     },
     {
       title: "Risk Factors",
-      description: "Understand factors that may increase breast cancer risk and prevention strategies",
+      description:
+        "Understand factors that may increase breast cancer risk and prevention strategies",
       icon: "⚠️",
       link: "https://www.sciencedirect.com/science/article/abs/pii/S1877782122000339?via%3Dihub",
     },
     {
       title: "Support Resources",
-      description: "Find support groups and resources for patients and caregivers",
+      description:
+        "Find support groups and resources for patients and caregivers",
       icon: "🤝",
       link: "https://www.breastcancer.org/treatment/complementary-therapy/types/support-groups",
     },
     {
       title: "Treatment Options",
-      description: "Overview of current treatment approaches and clinical trials",
+      description:
+        "Overview of current treatment approaches and clinical trials",
       icon: "💊",
       link: "https://www.breastcancer.org/treatment?gad_campaignid=2187230",
     },
-  ]
+  ];
 
   const suggestedQuestions = [
     "What are common symptoms of breast cancer?",
     "How is breast cancer diagnosed?",
     "What are the risk factors for breast cancer?",
     "What screening methods are recommended?",
-  ]
+  ];
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    scrollToBottom();
+  }, [messages]);
 
   // Add invisible scrollbar styles to the document head
   useEffect(() => {
-    const style = document.createElement("style")
+    const style = document.createElement("style");
     style.innerHTML = `
       .invisible-scrollbar::-webkit-scrollbar {
         width: 0;
@@ -93,37 +96,46 @@ const Chatbot = () => {
           -webkit-overflow-scrolling: touch;
         }
       }
-    `
-    document.head.appendChild(style)
+    `;
+    document.head.appendChild(style);
 
     return () => {
-      document.head.removeChild(style)
-    }
-  }, [])
+      document.head.removeChild(style);
+    };
+  }, []);
 
   const handleFileSelect = (e) => {
-    const files = Array.from(e.target.files)
-    setUploadedFiles([...uploadedFiles, ...files])
-    console.log("Files selected:", files)
-  }
+    const files = Array.from(e.target.files);
+    setUploadedFiles([...uploadedFiles, ...files]);
+    console.log("Files selected:", files);
+  };
 
   const triggerFileUpload = () => {
-    fileInputRef.current.click()
-  }
+    fileInputRef.current.click();
+  };
 
-  const processMammogramImage = async (file) => {
-    if (!file || !file.type.startsWith("image/")) {
+  const processMammogramImage = async (file, question = "") => {
+    if (
+      !file ||
+      (!file.type.startsWith("image/") &&
+        !file.name.toLowerCase().endsWith(".dcm") &&
+        !file.name.toLowerCase().endsWith(".dicom"))
+    ) {
       return {
         success: false,
-        message: "Please upload a valid image file",
-      }
+        message: "Please upload a valid image or DICOM (.dcm, .dicom) file",
+      };
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     try {
-      const formData = new FormData()
-      formData.append("file", file)
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "question",
+        question || "Please explain the results of this mammogram."
+      );
 
       // First check if the API is running
       try {
@@ -132,50 +144,47 @@ const Chatbot = () => {
           headers: {
             Accept: "application/json",
           },
-        })
+        });
 
         if (!healthCheck.ok) {
-          console.warn("API health check failed")
+          console.warn("API health check failed");
         } else {
-          console.log("API health check succeeded")
+          console.log("API health check succeeded");
         }
       } catch (error) {
-        console.error("API health check failed:", error)
+        console.error("API health check failed:", error);
       }
 
       // Send the image to your FastAPI endpoint
-      console.log("Sending image to API...")
+      console.log("Sending image to API...");
       const response = await fetch("http://127.0.0.1:8000/predict/", {
         method: "POST",
         body: formData,
-        headers: {
-          // Do not set Content-Type header when sending FormData
-          // The browser will set it including the boundary
-        },
-      })
+        // Do not set Content-Type header when sending FormData
+      });
 
       if (!response.ok) {
-        throw new Error(`API request failed with status: ${response.status}`)
+        throw new Error(`API request failed with status: ${response.status}`);
       }
 
-      const data = await response.json()
-      console.log("API response received:", data)
+      const data = await response.json();
+      console.log("API response received:", data);
 
       return {
         success: true,
         data: data,
         message: "Image analysis complete",
-      }
+      };
     } catch (error) {
-      console.error("Error processing image:", error)
+      console.error("Error processing image:", error);
       return {
         success: false,
-        message: `Error analyzing image: ${error.message}. Make sure the API server is running at http://127.0.0.1:8000`,
-      }
+        message: `Error analyzing image: ${error.message}.`,
+      };
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const getClassLabel = (classId) => {
     // Map class IDs to labels based on your YOLO model's classes
@@ -183,64 +192,81 @@ const Chatbot = () => {
       0: "Malignant",
       1: "Benign",
       // Add more classes as needed
-    }
-    return labels[classId] || `Class ${classId}`
-  }
+    };
+    return labels[classId] || `Class ${classId}`;
+  };
 
   const renderPredictionResults = (data) => {
-    if (!data || !data.results) return "No prediction results available"
+    if (!data) return "No prediction results available";
 
-    // Extract prediction details
-    const predictions = data.results
-      .map((pred, index) => {
-        const className = getClassLabel(pred.class)
-        const confidence = (pred.confidence * 100).toFixed(2)
+    // Show annotated image if present
+    const imageHtml = data.annotated_image_base64
+      ? `<img src="data:image/jpeg;base64,${data.annotated_image_base64}" alt="Annotated mammogram" class="max-w-full rounded-lg border border-gray-200 shadow-sm" />`
+      : "";
 
-        return `
-        <div class="p-3 border rounded-lg mb-2 bg-gray-50">
-          <strong>Finding ${index + 1}:</strong> ${className}
-          <br/>
-          <strong>Confidence:</strong> ${confidence}%
-        </div>
-      `
-      })
-      .join("")
+    // Show detection result and explanation if present
+    const detectionResult = data.detection_result
+      ? `<div class="font-semibold mb-2">${data.detection_result}</div>`
+      : "";
 
-    // Create HTML with the image and predictions
+    const explanation = data.explanation
+      ? `<div class="mt-2 text-gray-700">${data.explanation}</div>`
+      : "";
+
+    // Show bounding box results if present
+    let predictions = "";
+    if (
+      data.results &&
+      Array.isArray(data.results) &&
+      data.results.length > 0
+    ) {
+      predictions =
+        `<div class="mt-3">
+        <h4 class="font-semibold text-lg mb-2">Findings:</h4>` +
+        data.results
+          .map(
+            (pred, index) =>
+              `<div class="p-3 border rounded-lg mb-2 bg-gray-50">
+              <strong>Finding ${index + 1}:</strong> ${getClassLabel(
+                pred.class
+              )}
+              <br/>
+              <strong>Confidence:</strong> ${(pred.confidence * 100).toFixed(
+                2
+              )}%
+            </div>`
+          )
+          .join("") +
+        `</div>`;
+    }
+
     return `
-      <div class="mt-4">
-        <div class="mb-3">
-          <img 
-            src="data:image/jpeg;base64,${data.annotated_image_base64}" 
-            alt="Annotated mammogram" 
-            class="max-w-full rounded-lg border border-gray-200 shadow-sm"
-          />
-        </div>
-        <div class="mt-3">
-          <h4 class="font-semibold text-lg mb-2">Analysis Results:</h4>
-          ${predictions}
-        </div>
-        <div class="mt-3 text-gray-500 text-xs italic bg-gray-50 p-2 rounded-lg border border-gray-200">
-          Note: This is an AI-assisted analysis and should be reviewed by a healthcare professional.
-        </div>
+    <div class="mt-4">
+      <div class="mb-3">${imageHtml}</div>
+      ${detectionResult}
+      ${predictions}
+      ${explanation}
+      <div class="mt-3 text-gray-500 text-xs italic bg-gray-50 p-2 rounded-lg border border-gray-200">
+        Note: This is an AI-assisted analysis and should be reviewed by a healthcare professional.
       </div>
-    `
-  }
+    </div>
+  `;
+  };
 
   const handleSendMessage = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     // Check if there's text input or files to process
-    if (!input.trim() && uploadedFiles.length === 0) return
+    if (!input.trim() && uploadedFiles.length === 0) return;
 
     // Create a variable to track whether we need to add any responses
-    let responseNeeded = false
+    let responseNeeded = false;
 
     // Add user message if there's text input
     if (input.trim()) {
-      const userMessage = { id: Date.now(), text: input, sender: "user" }
-      setMessages([...messages, userMessage])
-      responseNeeded = true
+      const userMessage = { id: Date.now(), text: input, sender: "user" };
+      setMessages([...messages, userMessage]);
+      responseNeeded = true;
     }
 
     // Process any uploaded images
@@ -251,109 +277,137 @@ const Chatbot = () => {
         text: `Uploading ${uploadedFiles.length} file(s) for analysis...`,
         sender: "user",
         isFileUpload: true,
-      }
-      setMessages((prev) => [...prev, fileMessage])
+      };
+      setMessages((prev) => [...prev, fileMessage]);
 
       // Process each file
+      // ...existing code...
       for (const file of uploadedFiles) {
-        // For now, we'll only process the first image file
-        if (file.type.startsWith("image/")) {
-          try {
-            const result = await processMammogramImage(file)
+        // Accept image files or DICOM files by extension
+        const isImage = file.type.startsWith("image/");
+        const isDicom =
+          file.name.toLowerCase().endsWith(".dcm") ||
+          file.name.toLowerCase().endsWith(".dicom");
 
-            let botResponse
+        if (isImage || isDicom) {
+          try {
+            const result = await processMammogramImage(file, input);
+
+            let botResponse;
             if (result.success) {
               botResponse = {
                 id: Date.now() + 2,
                 text: `<div>
-                  <p>I've analyzed the mammogram image:</p>
-                  ${renderPredictionResults(result.data)}
-                </div>`,
+            <p>I've analyzed the mammogram image:</p>
+            ${renderPredictionResults(result.data)}
+          </div>`,
                 sender: "bot",
                 isHTML: true,
-              }
+              };
             } else {
               botResponse = {
                 id: Date.now() + 2,
                 text: result.message,
                 sender: "bot",
-              }
+              };
             }
 
-            setMessages((prev) => [...prev, botResponse])
+            setMessages((prev) => [...prev, botResponse]);
           } catch (error) {
-            console.error("Error during image processing:", error)
+            console.error("Error during image processing:", error);
             const errorResponse = {
               id: Date.now() + 2,
-              text: `There was an error processing your image: ${error.message}. Please make sure the API server is running at http://127.0.0.1:8000`,
+              text: `There was an error processing your image: ${error.message}.`,
               sender: "bot",
-            }
-            setMessages((prev) => [...prev, errorResponse])
+            };
+            setMessages((prev) => [...prev, errorResponse]);
           }
-          break // Only process one image for now
+          break; // Only process one file for now
         }
       }
 
       // Clear the uploaded files after processing
-      setUploadedFiles([])
-      responseNeeded = false // We've already added responses for the files
+      setUploadedFiles([]);
+      responseNeeded = false; // We've already added responses for the files
     }
 
     // Clear the input field
-    setInput("")
+    setInput("");
 
     // Only provide a chatbot response if text was entered and we need to respond to it
     if (responseNeeded) {
-      // Simulate bot response after a short delay
-      setTimeout(() => {
+      setIsLoading(true);
+      try {
+        const formData = new FormData();
+        formData.append("question", input);
+
+        const apiResponse = await fetch("http://127.0.0.1:8000/predict/", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await apiResponse.json();
         const botResponse = {
           id: Date.now() + 3,
-          text: getBotResponse(input),
+          text: data.response || "Sorry, I couldn't find an answer.",
           sender: "bot",
-        }
-        setMessages((prev) => [...prev, botResponse])
-      }, 1000)
+        };
+        setMessages((prev) => [...prev, botResponse]);
+      } catch (error) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: Date.now() + 3,
+            text: "There was an error contacting the API.",
+            sender: "bot",
+          },
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }
-
+  };
   const handleQuestionClick = (question) => {
-    setInput(question)
+    setInput(question);
     // Focus on input after setting the question
-    document.getElementById("chat-input").focus()
-  }
+    document.getElementById("chat-input").focus();
+  };
 
   const getBotResponse = (userInput) => {
-    const input = userInput.toLowerCase()
+    const input = userInput.toLowerCase();
 
     if (input.includes("symptom")) {
-      return "Common symptoms of breast cancer include a lump in the breast, changes in breast size or shape, skin changes, nipple discharge, and nipple inversion. However, many breast cancers have no obvious symptoms at first, which is why regular screening is important."
+      return "Common symptoms of breast cancer include a lump in the breast, changes in breast size or shape, skin changes, nipple discharge, and nipple inversion. However, many breast cancers have no obvious symptoms at first, which is why regular screening is important.";
     } else if (input.includes("diagnos")) {
-      return "Breast cancer is typically diagnosed through a combination of clinical breast exams, imaging tests (mammography, ultrasound, MRI), and biopsy. If a suspicious area is found, a biopsy will be performed to determine if cancer cells are present."
+      return "Breast cancer is typically diagnosed through a combination of clinical breast exams, imaging tests (mammography, ultrasound, MRI), and biopsy. If a suspicious area is found, a biopsy will be performed to determine if cancer cells are present.";
     } else if (input.includes("risk factor")) {
-      return "Risk factors for breast cancer include being female, increasing age, personal or family history of breast cancer, inherited genes (BRCA1 and BRCA2), radiation exposure, obesity, beginning periods before age 12, starting menopause after age 55, having first child after age 30, and hormone therapy."
+      return "Risk factors for breast cancer include being female, increasing age, personal or family history of breast cancer, inherited genes (BRCA1 and BRCA2), radiation exposure, obesity, beginning periods before age 12, starting menopause after age 55, having first child after age 30, and hormone therapy.";
     } else if (input.includes("screening")) {
-      return "Recommended screening methods include regular mammograms (typically starting at age 40-50 depending on guidelines), clinical breast exams by a healthcare provider, and breast self-awareness. High-risk individuals may need additional screening like MRI."
-    } else if (input.includes("detection") || input.includes("analyze") || input.includes("mammogram")) {
-      return "You can upload a mammogram image using the paperclip icon, and I'll analyze it using our AI detection system. Please note that this analysis is for informational purposes only and should be reviewed by a healthcare professional."
+      return "Recommended screening methods include regular mammograms (typically starting at age 40-50 depending on guidelines), clinical breast exams by a healthcare provider, and breast self-awareness. High-risk individuals may need additional screening like MRI.";
+    } else if (
+      input.includes("detection") ||
+      input.includes("analyze") ||
+      input.includes("mammogram")
+    ) {
+      return "You can upload a mammogram image using the paperclip icon, and I'll analyze it using our AI detection system. Please note that this analysis is for informational purposes only and should be reviewed by a healthcare professional.";
     } else {
-      return "I'm here to provide information about breast cancer. You can ask about symptoms, diagnosis, risk factors, screening methods, treatment options, or support resources. You can also upload a mammogram image for AI-assisted analysis. How can I help you today?"
+      return "I'm here to provide information about breast cancer. You can ask about symptoms, diagnosis, risk factors, screening methods, treatment options, or support resources. You can also upload a mammogram image for AI-assisted analysis. How can I help you today?";
     }
-  }
+  };
 
   // Custom component to render messages with HTML content
   const MessageContent = ({ message }) => {
     if (message.isHTML) {
-      return <div dangerouslySetInnerHTML={{ __html: message.text }} />
+      return <div dangerouslySetInnerHTML={{ __html: message.text }} />;
     }
-    return <div>{message.text}</div>
-  }
+    return <div>{message.text}</div>;
+  };
 
   const ResourceCard = ({ title, description, icon, link }) => {
     const handleResourceClick = () => {
       // You can add any custom logic here before navigation
-      console.log(`Navigating to: ${link}`)
-      window.location.href = link
-    }
+      console.log(`Navigating to: ${link}`);
+      window.location.href = link;
+    };
 
     return (
       <div
@@ -363,8 +417,8 @@ const Chatbot = () => {
         tabIndex={0}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault()
-            handleResourceClick()
+            e.preventDefault();
+            handleResourceClick();
           }
         }}
       >
@@ -374,8 +428,8 @@ const Chatbot = () => {
           <p className="text-xs text-gray-600 leading-relaxed">{description}</p>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-white to-gray-50">
@@ -396,8 +450,6 @@ const Chatbot = () => {
       </header>
 
       <div className="flex flex-1 overflow-hidden max-w-7xl mx-auto w-full p-4 gap-4">
-       
-
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {activeTab === "chat" && (
@@ -410,7 +462,8 @@ const Chatbot = () => {
                   <div>
                     <h2 className="font-bold text-gray-800">AI Assistant</h2>
                     <p className="text-xs text-gray-500">
-                      Ask questions about breast cancer or upload mammograms for analysis
+                      Ask questions about breast cancer or upload mammograms for
+                      analysis
                     </p>
                   </div>
                 </div>
@@ -421,7 +474,11 @@ const Chatbot = () => {
                 {messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                    className={`flex ${
+                      message.sender === "user"
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
                   >
                     <div
                       className={`max-w-[80%] p-4 rounded-xl text-sm ${
@@ -447,7 +504,9 @@ const Chatbot = () => {
                           className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"
                           style={{ animationDelay: "0.4s" }}
                         ></div>
-                        <span className="ml-2 text-sm text-gray-500">Analyzing image...</span>
+                        <span className="ml-2 text-sm text-gray-500">
+                          Analyzing image...
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -476,10 +535,16 @@ const Chatbot = () => {
                           key={index}
                           className="pl-3 pr-1 py-1 flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full text-sm"
                         >
-                          <span className="truncate max-w-[150px] text-blue-700">{file.name}</span>
+                          <span className="truncate max-w-[150px] text-blue-700">
+                            {file.name}
+                          </span>
                           <button
                             className="h-5 w-5 rounded-full hover:bg-blue-100 flex items-center justify-center"
-                            onClick={() => setUploadedFiles(uploadedFiles.filter((_, i) => i !== index))}
+                            onClick={() =>
+                              setUploadedFiles(
+                                uploadedFiles.filter((_, i) => i !== index)
+                              )
+                            }
                           >
                             <X className="h-3 w-3 text-blue-700" />
                           </button>
@@ -511,7 +576,7 @@ const Chatbot = () => {
                         ref={fileInputRef}
                         onChange={handleFileSelect}
                         className="hidden"
-                        accept="image/*"
+                        accept="image/*,.dcm,.dicom"
                       />
                     </div>
                     <button
@@ -523,7 +588,11 @@ const Chatbot = () => {
                           : "bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 text-white"
                       }`}
                     >
-                      {isLoading ? "Processing..." : <Send className="h-5 w-5" />}
+                      {isLoading ? (
+                        "Processing..."
+                      ) : (
+                        <Send className="h-5 w-5" />
+                      )}
                     </button>
                   </form>
                 </div>
@@ -539,8 +608,12 @@ const Chatbot = () => {
                     <FileText className="h-5 w-5" />
                   </div>
                   <div>
-                    <h2 className="font-bold text-gray-800">Helpful Resources</h2>
-                    <p className="text-xs text-gray-500">Educational materials and support for breast cancer</p>
+                    <h2 className="font-bold text-gray-800">
+                      Helpful Resources
+                    </h2>
+                    <p className="text-xs text-gray-500">
+                      Educational materials and support for breast cancer
+                    </p>
                   </div>
                 </div>
               </div>
@@ -565,22 +638,29 @@ const Chatbot = () => {
                     Understanding Breast Cancer
                   </h3>
                   <p className="text-gray-700 mb-4">
-                    Breast cancer is one of the most common cancers affecting women worldwide. Early detection through
-                    regular screening and awareness of symptoms can significantly improve outcomes.
+                    Breast cancer is one of the most common cancers affecting
+                    women worldwide. Early detection through regular screening
+                    and awareness of symptoms can significantly improve
+                    outcomes.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                      <h4 className="font-bold text-blue-700 mb-2">Early Detection</h4>
+                      <h4 className="font-bold text-blue-700 mb-2">
+                        Early Detection
+                      </h4>
                       <p className="text-sm text-gray-600">
-                        Regular mammograms are the most effective way to detect breast cancer early, often before
-                        symptoms appear.
+                        Regular mammograms are the most effective way to detect
+                        breast cancer early, often before symptoms appear.
                       </p>
                     </div>
                     <div className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-                      <h4 className="font-bold text-purple-700 mb-2">Treatment Advances</h4>
+                      <h4 className="font-bold text-purple-700 mb-2">
+                        Treatment Advances
+                      </h4>
                       <p className="text-sm text-gray-600">
-                        Modern treatments are increasingly personalized, based on the specific type of breast cancer and
-                        genetic factors.
+                        Modern treatments are increasingly personalized, based
+                        on the specific type of breast cancer and genetic
+                        factors.
                       </p>
                     </div>
                   </div>
@@ -590,10 +670,14 @@ const Chatbot = () => {
                   <div className="flex items-start gap-3">
                     <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                     <div>
-                      <h3 className="font-bold text-gray-800 mb-1">Medical Disclaimer</h3>
+                      <h3 className="font-bold text-gray-800 mb-1">
+                        Medical Disclaimer
+                      </h3>
                       <p className="text-sm text-gray-600 leading-relaxed">
-                        This chatbot provides general information only and is not a substitute for professional medical
-                        advice. Always consult with qualified healthcare providers for medical concerns.
+                        This chatbot provides general information only and is
+                        not a substitute for professional medical advice. Always
+                        consult with qualified healthcare providers for medical
+                        concerns.
                       </p>
                     </div>
                   </div>
@@ -607,10 +691,16 @@ const Chatbot = () => {
               <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white">
-                    {activeTab === "community" ? <Users className="h-5 w-5" /> : <Settings className="h-5 w-5" />}
+                    {activeTab === "community" ? (
+                      <Users className="h-5 w-5" />
+                    ) : (
+                      <Settings className="h-5 w-5" />
+                    )}
                   </div>
                   <div>
-                    <h2 className="font-bold text-gray-800">{activeTab === "community" ? "Community" : "Settings"}</h2>
+                    <h2 className="font-bold text-gray-800">
+                      {activeTab === "community" ? "Community" : "Settings"}
+                    </h2>
                     <p className="text-xs text-gray-500">
                       {activeTab === "community"
                         ? "Connect with others in the breast cancer community"
@@ -630,7 +720,9 @@ const Chatbot = () => {
                     )}
                   </div>
                   <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {activeTab === "community" ? "Community Coming Soon" : "Settings Coming Soon"}
+                    {activeTab === "community"
+                      ? "Community Coming Soon"
+                      : "Settings Coming Soon"}
                   </h3>
                   <p className="text-gray-600 max-w-md">
                     {activeTab === "community"
@@ -672,10 +764,14 @@ const Chatbot = () => {
                 <div className="flex items-start gap-2">
                   <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h3 className="font-bold text-sm mb-1">Medical Disclaimer</h3>
+                    <h3 className="font-bold text-sm mb-1">
+                      Medical Disclaimer
+                    </h3>
                     <p className="text-xs text-gray-600 leading-relaxed">
-                      This chatbot provides general information only and is not a substitute for professional medical
-                      advice. Always consult with qualified healthcare providers for medical concerns.
+                      This chatbot provides general information only and is not
+                      a substitute for professional medical advice. Always
+                      consult with qualified healthcare providers for medical
+                      concerns.
                     </p>
                   </div>
                 </div>
@@ -688,7 +784,7 @@ const Chatbot = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Chatbot
+export default Chatbot;
