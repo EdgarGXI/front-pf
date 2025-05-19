@@ -47,7 +47,7 @@ const Sidebar = ({ activeTab, setActiveTab }) => {
           tooltip="About"
           active={activeTab === "about"}
           onClick={() => setActiveTab("about")}
-          to="/about"
+          to="https://github.com/paviag/pf-bula-castillo-garcia"
             />
       </div>
 
