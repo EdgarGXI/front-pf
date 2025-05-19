@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import reportImg from '../imgs/report.jpg';
+import reportImg from '../imgs/report.jpeg';
 import matrixImg from '../imgs/matrix.jpeg';
 
 
@@ -12,6 +12,7 @@ import {
   ChevronDown,
   ChevronUp,
   TrendingUp,
+  TrendingDown,
   CheckCircle2,
   AlertTriangle,
   LineChart,
@@ -39,7 +40,7 @@ export default function ProjectInformation() {
         </h1>
         <div className="flex items-center justify-center gap-2 mb-4">
           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500 text-white">
-            75% Accuracy
+            74% Accuracy
           </span>
           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-500 text-white">
             Validated
@@ -102,37 +103,37 @@ export default function ProjectInformation() {
                   <div className="grid grid-cols-2 gap-6 mb-6">
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Accuracy</div>
-                      <div className="text-3xl font-bold text-blue-700">75%</div>
-                      <div className="mt-2 flex items-center text-xs text-green-600">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        <span>+2.3% from baseline</span>
+                      <div className="text-3xl font-bold text-blue-700">74%</div>
+                      <div className="mt-2 flex items-center text-xs text-pink-700">
+                        <TrendingDown className="h-3 w-3 mr-1" />
+                        <span>-2.3% from baseline</span>
                       </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Precision</div>
-                      <div className="text-3xl font-bold text-purple-700">85%</div>
-                      <div className="mt-2 flex items-center text-xs text-green-600">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        <span>+1.8% from baseline</span>
+                      <div className="text-3xl font-bold text-purple-700">81%</div>
+                      <div className="mt-2 flex items-center text-xs text-pink-700">
+                        <TrendingDown className="h-3 w-3 mr-1" />
+                        <span>-4.71% from baseline</span>
                       </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-4 rounded-xl border border-pink-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Recall</div>
-                      <div className="text-3xl font-bold text-pink-700">75%</div>
-                      <div className="mt-2 flex items-center text-xs text-green-600">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        <span>+3.2% from baseline</span>
+                      <div className="text-3xl font-bold text-pink-700">74%</div>
+                      <div className="mt-2 flex items-center text-xs text-pink-700">
+                        <TrendingDown className="h-3 w-3 mr-1" />
+                        <span>–1.33% from baseline</span>
                       </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-xl border border-amber-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">F1 Score</div>
-                      <div className="text-3xl font-bold text-amber-700">76%</div>
-                      <div className="mt-2 flex items-center text-xs text-green-600">
-                        <TrendingUp className="h-3 w-3 mr-1" />
-                        <span>+2.5% from baseline</span>
+                      <div className="text-3xl font-bold text-amber-700">74%</div>
+                      <div className="mt-2 flex items-center text-xs text-pink-700">
+                        <TrendingDown className="h-3 w-3 mr-1" />
+                        <span>–2.63% from baseline</span>
                       </div>
                     </div>
                   </div>
@@ -206,13 +207,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">True Positives</span>
                         <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
-                          52.7%
+                          36.41%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-green-700">783</div>
+                      <div className="text-2xl font-bold text-green-700">1033</div>
                       <div className="mt-2">
                         <div className="w-full bg-green-100 rounded-full h-2">
-                          <div className="bg-green-500 h-2 rounded-full" style={{ width: " 52.7%" }}></div>
+                          <div className="bg-green-500 h-2 rounded-full" style={{ width: " 36.41%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -221,13 +222,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">False Positives</span>
                         <span className="text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
-                          23.4%
+                          24.27%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-red-700">348</div>
+                      <div className="text-2xl font-bold text-red-700">689</div>
                       <div className="mt-2">
                         <div className="w-full bg-red-100 rounded-full h-2">
-                          <div className="bg-red-500 h-2 rounded-full" style={{ width: "23.4%" }}></div>
+                          <div className="bg-red-500 h-2 rounded-full" style={{ width: "24.27%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -236,13 +237,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">False Negatives</span>
                         <span className="text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
-                          2.0%
+                          2.08%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-amber-700">29</div>
+                      <div className="text-2xl font-bold text-amber-700">59</div>
                       <div className="mt-2">
                         <div className="w-full bg-amber-100 rounded-full h-2">
-                          <div className="bg-amber-500 h-2 rounded-full" style={{ width: "2.0%" }}></div>
+                          <div className="bg-amber-500 h-2 rounded-full" style={{ width: "2.08%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -251,13 +252,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">True Negatives</span>
                         <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
-                          21.9%
+                          37.25%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-blue-700">325</div>
+                      <div className="text-2xl font-bold text-blue-700">1057</div>
                       <div className="mt-2">
                         <div className="w-full bg-blue-100 rounded-full h-2">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "21.9%" }}></div>
+                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "37.25%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -266,10 +267,10 @@ export default function ProjectInformation() {
 
                 <div className="bg-gray-50 border-t px-6 py-4">
                   <div className="w-full flex justify-between items-center text-sm text-gray-500">
-                    <span>Total samples: 1,485</span>
+                    <span>Total samples: 2,838</span>
                     <span className="flex items-center">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mr-1" />
-                      75% overall accuracy
+                      74% overall accuracy
                     </span>
                   </div>
                 </div>
