@@ -40,7 +40,7 @@ export default function ProjectInformation() {
         </h1>
         <div className="flex items-center justify-center gap-2 mb-4">
           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500 text-white">
-            74% Accuracy
+            76% Accuracy
           </span>
           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-blue-500 text-white">
             Validated
@@ -103,37 +103,37 @@ export default function ProjectInformation() {
                   <div className="grid grid-cols-2 gap-6 mb-6">
                     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Accuracy</div>
-                      <div className="text-3xl font-bold text-blue-700">74%</div>
-                      <div className="mt-2 flex items-center text-xs text-pink-700">
-                        <TrendingDown className="h-3 w-3 mr-1" />
-                        <span>-2.3% from baseline</span>
+                      <div className="text-3xl font-bold text-blue-700">76%</div>
+                      <div className="mt-2 flex items-center text-xs text-green-500">
+                        <TrendingUp className="h-3 w-3 mr-1" />
+                        <span>+2.70 %from baseline</span>
                       </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Precision</div>
-                      <div className="text-3xl font-bold text-purple-700">81%</div>
-                      <div className="mt-2 flex items-center text-xs text-pink-700">
-                        <TrendingDown className="h-3 w-3 mr-1" />
-                        <span>-4.71% from baseline</span>
+                      <div className="text-3xl font-bold text-purple-700">88%</div>
+                       <div className="mt-2 flex items-center text-xs text-green-500">
+                        <TrendingUp className="h-3 w-3 mr-1" />
+                        <span>+8.64% from baseline</span>
                       </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-4 rounded-xl border border-pink-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">Recall</div>
-                      <div className="text-3xl font-bold text-pink-700">74%</div>
-                      <div className="mt-2 flex items-center text-xs text-pink-700">
-                        <TrendingDown className="h-3 w-3 mr-1" />
-                        <span>–1.33% from baseline</span>
+                      <div className="text-3xl font-bold text-pink-700">76%</div>
+                      <div className="mt-2 flex items-center text-xs text-green-500">
+                        <TrendingUp className="h-3 w-3 mr-1" />
+                        <span>+2.70 % from baseline</span>
                       </div>
                     </div>
 
                     <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-xl border border-amber-100 flex flex-col">
                       <div className="text-sm text-gray-500 mb-1">F1 Score</div>
-                      <div className="text-3xl font-bold text-amber-700">74%</div>
-                      <div className="mt-2 flex items-center text-xs text-pink-700">
-                        <TrendingDown className="h-3 w-3 mr-1" />
-                        <span>–2.63% from baseline</span>
+                      <div className="text-3xl font-bold text-amber-700">79%</div>
+                      <div className="mt-2 flex items-center text-xs text-green-500">
+                        <TrendingUp className="h-3 w-3 mr-1" />
+                        <span>+6.76 % from baseline</span>
                       </div>
                     </div>
                   </div>
@@ -207,13 +207,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">True Positives</span>
                         <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
-                          36.41%
+                          60.4%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-green-700">1033</div>
+                      <div className="text-2xl font-bold text-green-700">451</div>
                       <div className="mt-2">
                         <div className="w-full bg-green-100 rounded-full h-2">
-                          <div className="bg-green-500 h-2 rounded-full" style={{ width: " 36.41%" }}></div>
+                          <div className="bg-green-500 h-2 rounded-full" style={{ width: "60.4%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -222,13 +222,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">False Positives</span>
                         <span className="text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
-                          24.27%
+                          22.8%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-red-700">689</div>
+                      <div className="text-2xl font-bold text-red-700">170</div>
                       <div className="mt-2">
                         <div className="w-full bg-red-100 rounded-full h-2">
-                          <div className="bg-red-500 h-2 rounded-full" style={{ width: "24.27%" }}></div>
+                          <div className="bg-red-500 h-2 rounded-full" style={{ width: "22.8%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -237,13 +237,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">False Negatives</span>
                         <span className="text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
-                          2.08%
+                          1.6 %
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-amber-700">59</div>
+                      <div className="text-2xl font-bold text-amber-700">12</div>
                       <div className="mt-2">
                         <div className="w-full bg-amber-100 rounded-full h-2">
-                          <div className="bg-amber-500 h-2 rounded-full" style={{ width: "2.08%" }}></div>
+                          <div className="bg-amber-500 h-2 rounded-full" style={{ width: "1.6%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -252,13 +252,13 @@ export default function ProjectInformation() {
                       <div className="flex justify-between items-center mb-1">
                         <span className="text-sm text-gray-500">True Negatives</span>
                         <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
-                          37.25%
+                          15.3%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-blue-700">1057</div>
+                      <div className="text-2xl font-bold text-blue-700">114</div>
                       <div className="mt-2">
                         <div className="w-full bg-blue-100 rounded-full h-2">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "37.25%" }}></div>
+                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "15.3%" }}></div>
                         </div>
                       </div>
                     </div>
@@ -267,10 +267,10 @@ export default function ProjectInformation() {
 
                 <div className="bg-gray-50 border-t px-6 py-4">
                   <div className="w-full flex justify-between items-center text-sm text-gray-500">
-                    <span>Total samples: 2,838</span>
+                    <span>Total samples: 747</span>
                     <span className="flex items-center">
                       <CheckCircle2 className="h-4 w-4 text-green-500 mr-1" />
-                      74% overall accuracy
+                      76% overall accuracy
                     </span>
                   </div>
                 </div>
