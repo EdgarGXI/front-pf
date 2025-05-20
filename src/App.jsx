@@ -1,14 +1,19 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import Sidebar from "./components/Sidebar"
-import Chatbot from "./pages/Chatbot"
-import Dashboard from "./pages/Dashboard"
-import "./App.css"
+import { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import Chatbot from "./pages/Chatbot";
+import Dashboard from "./pages/Dashboard";
+import "./App.css";
 
 function App() {
-  const [activeTab, setActiveTab] = useState("chatbot")
+  const [activeTab, setActiveTab] = useState("chatbot");
 
   return (
     <Router>
@@ -23,7 +28,7 @@ function App() {
         </div>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
