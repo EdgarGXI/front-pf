@@ -9,13 +9,19 @@
 //  </StrictMode>,
 //)
 
-import React from "react"
-import ReactDOM from "react-dom/client"
-import App from "./App.jsx"
-import "./index.css"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
+
+const redirectUrl = sessionStorage.getItem("redirectUrl");
+if (redirectUrl) {
+  sessionStorage.removeItem("redirectUrl");
+  window.history.replaceState(null, null, redirectUrl);
+}
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);
