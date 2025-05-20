@@ -185,7 +185,7 @@ const Chatbot = () => {
       console.error("Error processing image:", error);
       return {
         success: false,
-        message: `Error analyzing image: ${error.message}.`,
+        message: `Error with output: ${error.message}.`,
       };
     } finally {
       setIsLoading(false);
@@ -514,7 +514,7 @@ const Chatbot = () => {
                           style={{ animationDelay: "0.4s" }}
                         ></div>
                         <span className="ml-2 text-sm text-gray-500">
-                          Analyzing image...
+                          Loading...
                         </span>
                       </div>
                     </div>
