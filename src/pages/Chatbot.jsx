@@ -139,6 +139,7 @@ const Chatbot = () => {
 
       // First check if the API is running
       try {
+        //http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/
         const healthCheck = await fetch(
           "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/",
           {
@@ -160,6 +161,7 @@ const Chatbot = () => {
 
       // Send the image to your FastAPI endpoint
       console.log("Sending image to API...");
+      //http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/predict/
       const response = await fetch(
         "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/",
         {
@@ -346,7 +348,7 @@ const Chatbot = () => {
       try {
         const formData = new FormData();
         formData.append("question", input);
-
+        ////http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/predict/
         const apiResponse = await fetch(
           "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/",
           {
