@@ -139,12 +139,15 @@ const Chatbot = () => {
 
       // First check if the API is running
       try {
-        const healthCheck = await fetch("http://127.0.0.1:8000/", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        });
+        const healthCheck = await fetch(
+          "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        );
 
         if (!healthCheck.ok) {
           console.warn("API health check failed");
@@ -157,11 +160,14 @@ const Chatbot = () => {
 
       // Send the image to your FastAPI endpoint
       console.log("Sending image to API...");
-      const response = await fetch("http://127.0.0.1:8000/predict/", {
-        method: "POST",
-        body: formData,
-        // Do not set Content-Type header when sending FormData
-      });
+      const response = await fetch(
+        "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/",
+        {
+          method: "POST",
+          body: formData,
+          // Do not set Content-Type header when sending FormData
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`API request failed with status: ${response.status}`);
@@ -341,10 +347,13 @@ const Chatbot = () => {
         const formData = new FormData();
         formData.append("question", input);
 
-        const apiResponse = await fetch("http://127.0.0.1:8000/predict/", {
-          method: "POST",
-          body: formData,
-        });
+        const apiResponse = await fetch(
+          "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
         const data = await apiResponse.json();
         const botResponse = {
           id: Date.now() + 3,
