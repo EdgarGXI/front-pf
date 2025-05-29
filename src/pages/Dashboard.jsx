@@ -1,10 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import reportImg from '../imgs/report.jpeg';
-import matrixImg from '../imgs/matrix.jpeg';
-
+import { useState } from "react";
+import { motion } from "framer-motion";
+import reportImg from "../imgs/report.jpeg";
+import matrixImg from "../imgs/matrix.jpeg";
 
 import {
   BarChart3,
@@ -18,27 +17,65 @@ import {
   LineChart,
   Brain,
   Database,
-} from "lucide-react"
+  X,
+  ZoomIn,
+} from "lucide-react";
 
 export default function ProjectInformation() {
-  const [expandedSection, setExpandedSection] = useState(null)
-  const [activeTab, setActiveTab] = useState("cards")
+  const [expandedSection, setExpandedSection] = useState(null);
+  const [activeTab, setActiveTab] = useState("cards");
+  const [zoomedImage, setZoomedImage] = useState(null);
 
   const toggleSection = (section) => {
     if (expandedSection === section) {
-      setExpandedSection(null)
+      setExpandedSection(null);
     } else {
-      setExpandedSection(section)
+      setExpandedSection(section);
     }
-  }
+  };
+
+  const openImageModal = (imageSrc, imageAlt) => {
+    setZoomedImage({ src: imageSrc, alt: imageAlt });
+  };
+
+  const closeImageModal = () => {
+    setZoomedImage(null);
+  };
+
+  // Modal component for zoomed images
+  const ImageModal = () => {
+    if (!zoomedImage) return null;
+
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+        onClick={closeImageModal}
+      >
+        <div className="relative max-w-full max-h-full">
+          <button
+            onClick={closeImageModal}
+            className="absolute -top-10 right-0 text-white hover:text-gray-300 transition-colors"
+          >
+            <X className="h-8 w-8" />
+          </button>
+          <img
+            src={zoomedImage.src}
+            alt={zoomedImage.alt}
+            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8 bg-gradient-to-b ">
-      <div className="mb-10 text-center">
-        <h1 className="text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+    <div className="w-full max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8 bg-gradient-to-b">
+      <div className="mb-6 sm:mb-10 text-center">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent px-2">
           Breast Cancer Detection Model
         </h1>
-        <div className="flex items-center justify-center gap-2 mb-4">
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-4 px-2">
           <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-500 text-white">
             76% Accuracy
           </span>
@@ -49,117 +86,153 @@ export default function ProjectInformation() {
             Deep Learning
           </span>
         </div>
-        <p className="text-gray-600 max-w-2xl mx-auto text-lg">Advanced performance metrics and validation results</p>
+        <p className="text-gray-600 max-w-2xl mx-auto text-sm sm:text-lg px-4">
+          Advanced performance metrics and validation results
+        </p>
       </div>
 
       {/* Tabs */}
-      <div className="w-full mb-8">
-        <div className="grid w-full max-w-md mx-auto grid-cols-2 mb-8 rounded-lg overflow-hidden border">
+      <div className="w-full mb-6 sm:mb-8">
+        <div className="grid w-full max-w-md grid-cols-2 mb-6 sm:mb-8 rounded-lg overflow-hidden border mx-2 sm:mx-auto">
           <button
             onClick={() => setActiveTab("cards")}
-            className={`text-base py-3 flex items-center justify-center ${activeTab === "cards"
-              ? "bg-white text-gray-900 border-b-2 border-blue-500"
-              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-              }`}
+            className={`text-sm sm:text-base py-2 sm:py-3 flex items-center justify-center ${
+              activeTab === "cards"
+                ? "bg-white text-gray-900 border-b-2 border-blue-500"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+            }`}
           >
-            <BarChart3 className="mr-2 h-4 w-4" />
-            Performance Metrics
+            <BarChart3 className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Performance Metrics</span>
+            <span className="sm:hidden">Metrics</span>
           </button>
           <button
             onClick={() => setActiveTab("detailed")}
-            className={`text-base py-3 flex items-center justify-center ${activeTab === "detailed"
-              ? "bg-white text-gray-900 border-b-2 border-blue-500"
-              : "bg-gray-100 text-gray-500 hover:bg-gray-200"
-              }`}
+            className={`text-sm sm:text-base py-2 sm:py-3 flex items-center justify-center ${
+              activeTab === "detailed"
+                ? "bg-white text-gray-900 border-b-2 border-blue-500"
+                : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+            }`}
           >
-            <PieChart className="mr-2 h-4 w-4" />
-            Detailed Analysis
+            <PieChart className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden sm:inline">Detailed Analysis</span>
+            <span className="sm:hidden">Analysis</span>
           </button>
         </div>
 
         {/* Cards Tab Content */}
         {activeTab === "cards" && (
           <div className="mt-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-8">
               {/* Validation Metrics Card */}
-              <div className=" flex flex-col justify-between overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-xl">
+              <div className="flex flex-col justify-between overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-xl">
                 <div className="h-2 bg-gradient-to-r from-blue-500 to-purple-600"></div>
-                <div className="pb-2 border-b p-6">
-                  <div className="flex justify-between items-center">
+                <div className="pb-2 border-b p-3 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <div className="flex items-center gap-2">
                       <div className="p-2 rounded-full bg-blue-50">
-                        <BarChart3 className="h-5 w-5 text-blue-600" />
+                        <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-800">Validation Metrics</h3>
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                        Validation Metrics
+                      </h3>
                     </div>
-                    <span className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                    <span className="inline-flex items-center rounded-md border border-blue-200 bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 self-start sm:self-auto">
                       Performance
                     </span>
                   </div>
-                  <p className="text-gray-500 mt-2">Key performance indicators from our validation process</p>
+                  <p className="text-gray-500 mt-2 text-sm sm:text-base">
+                    Key performance indicators from our validation process
+                  </p>
                 </div>
 
-                <div className="p-6">
-                  <div className="grid grid-cols-2 gap-6 mb-6">
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100 flex flex-col">
-                      <div className="text-sm text-gray-500 mb-1">Accuracy</div>
-                      <div className="text-3xl font-bold text-blue-700">76%</div>
+                <div className="p-3 sm:p-6">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-6 mb-4 sm:mb-6">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-3 sm:p-4 rounded-xl border border-blue-100 flex flex-col">
+                      <div className="text-xs sm:text-sm text-gray-500 mb-1">
+                        Accuracy
+                      </div>
+                      <div className="text-xl sm:text-3xl font-bold text-blue-700">
+                        76%
+                      </div>
                       <div className="mt-2 flex items-center text-xs text-green-500">
                         <TrendingUp className="h-3 w-3 mr-1" />
-                        <span>+2.70 %from baseline</span>
+                        <span>+2.70% from baseline</span>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-xl border border-purple-100 flex flex-col">
-                      <div className="text-sm text-gray-500 mb-1">Precision</div>
-                      <div className="text-3xl font-bold text-purple-700">88%</div>
-                       <div className="mt-2 flex items-center text-xs text-green-500">
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-3 sm:p-4 rounded-xl border border-purple-100 flex flex-col">
+                      <div className="text-xs sm:text-sm text-gray-500 mb-1">
+                        Precision
+                      </div>
+                      <div className="text-xl sm:text-3xl font-bold text-purple-700">
+                        88%
+                      </div>
+                      <div className="mt-2 flex items-center text-xs text-green-500">
                         <TrendingUp className="h-3 w-3 mr-1" />
                         <span>+8.64% from baseline</span>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-4 rounded-xl border border-pink-100 flex flex-col">
-                      <div className="text-sm text-gray-500 mb-1">Recall</div>
-                      <div className="text-3xl font-bold text-pink-700">76%</div>
+                    <div className="bg-gradient-to-br from-pink-50 to-rose-50 p-3 sm:p-4 rounded-xl border border-pink-100 flex flex-col">
+                      <div className="text-xs sm:text-sm text-gray-500 mb-1">
+                        Recall
+                      </div>
+                      <div className="text-xl sm:text-3xl font-bold text-pink-700">
+                        76%
+                      </div>
                       <div className="mt-2 flex items-center text-xs text-green-500">
                         <TrendingUp className="h-3 w-3 mr-1" />
-                        <span>+2.70 % from baseline</span>
+                        <span>+2.70% from baseline</span>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-xl border border-amber-100 flex flex-col">
-                      <div className="text-sm text-gray-500 mb-1">F1 Score</div>
-                      <div className="text-3xl font-bold text-amber-700">79%</div>
+                    <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-3 sm:p-4 rounded-xl border border-amber-100 flex flex-col">
+                      <div className="text-xs sm:text-sm text-gray-500 mb-1">
+                        F1 Score
+                      </div>
+                      <div className="text-xl sm:text-3xl font-bold text-amber-700">
+                        79%
+                      </div>
                       <div className="mt-2 flex items-center text-xs text-green-500">
                         <TrendingUp className="h-3 w-3 mr-1" />
-                        <span>+6.76 % from baseline</span>
+                        <span>+6.76% from baseline</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                    <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                      <h4 className="font-medium text-gray-700 flex items-center">
-                        <LineChart className="h-4 w-4 mr-2 text-blue-600" />
+                    <div className="bg-gray-50 px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-200">
+                      <h4 className="font-medium text-gray-700 flex items-center text-sm sm:text-base">
+                        <LineChart className="h-3 w-3 sm:h-4 sm:w-4 mr-2 text-blue-600" />
                         Classification Report
                       </h4>
                     </div>
-                    <div className="p-2 bg-white">
-                      <img
-                        src={reportImg}
-                        alt="Validation metrics chart"
-                        className="w-full h-auto rounded-lg"
-                      />
+                    <div className="p-2 bg-white relative group">
+                      <div
+                        className="relative cursor-pointer"
+                        onClick={() =>
+                          openImageModal(reportImg, "Classification Report")
+                        }
+                      >
+                        <img
+                          src={reportImg}
+                          alt="Validation metrics chart"
+                          className="w-full h-auto rounded-lg transition-transform group-hover:scale-[1.02]"
+                        />
+                        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-lg flex items-center justify-center">
+                          <ZoomIn className="h-6 w-6 sm:h-8 sm:w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className=" bg-gray-50 border-t px-6 py-4">
-                  <div className="w-full flex justify-between items-center text-sm text-gray-500">
+                <div className="bg-gray-50 border-t px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs sm:text-sm text-gray-500">
                     <span>Last updated: May 15, 2025</span>
                     <span className="flex items-center">
-                      <CheckCircle2 className="h-4 w-4 text-green-500 mr-1" />
+                      <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 mr-1" />
                       Validated by Universidad del Norte
                     </span>
                   </div>
@@ -169,107 +242,149 @@ export default function ProjectInformation() {
               {/* Confusion Matrix Card */}
               <div className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white rounded-xl">
                 <div className="h-2 bg-gradient-to-r from-amber-500 to-red-500"></div>
-                <div className="pb-2 border-b p-6">
-                  <div className="flex justify-between items-center">
+                <div className="pb-2 border-b p-3 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                     <div className="flex items-center gap-2">
                       <div className="p-2 rounded-full bg-amber-50">
-                        <PieChart className="h-5 w-5 text-amber-600" />
+                        <PieChart className="h-4 w-4 sm:h-5 sm:w-5 text-amber-600" />
                       </div>
-                      <h3 className="text-xl font-bold text-gray-800">Confusion Matrix</h3>
+                      <h3 className="text-lg sm:text-xl font-bold text-gray-800">
+                        Confusion Matrix
+                      </h3>
                     </div>
-                    <span className="inline-flex items-center rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700">
+                    <span className="inline-flex items-center rounded-md border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-700 self-start sm:self-auto">
                       Classification
                     </span>
                   </div>
-                  <p className="text-gray-500 mt-2">Visual representation of our model's prediction accuracy</p>
+                  <p className="text-gray-500 mt-2 text-sm sm:text-base">
+                    Visual representation of our model's prediction accuracy
+                  </p>
                 </div>
 
-                <div className="p-6">
-                  <div className="grid grid-cols-1 gap-6 mb-6">
+                <div className="p-3 sm:p-6">
+                  <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-4 sm:mb-6">
                     <div className="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                      <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">
-                        <h4 className="font-medium text-gray-700">Confusion Matrix Visualization</h4>
+                      <div className="bg-gray-50 px-3 sm:px-4 py-2 sm:py-3 border-b border-gray-200">
+                        <h4 className="font-medium text-gray-700 text-sm sm:text-base">
+                          Confusion Matrix Visualization
+                        </h4>
                       </div>
-                      <div className="p-4 bg-white">
-                        <img
-                          src={matrixImg}
-                          alt="Confusion matrix"
-                          className="w-full h-auto rounded-lg"
-                        />
+                      <div className="p-3 sm:p-4 bg-white relative group">
+                        <div
+                          className="relative cursor-pointer"
+                          onClick={() =>
+                            openImageModal(matrixImg, "Confusion Matrix")
+                          }
+                        >
+                          <img
+                            src={matrixImg}
+                            alt="Confusion matrix"
+                            className="w-full h-auto rounded-lg transition-transform group-hover:scale-[1.02]"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-lg flex items-center justify-center">
+                            <ZoomIn className="h-6 w-6 sm:h-8 sm:w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        </div>
                       </div>
                     </div>
-
-                   
                   </div>
 
-                  <div className="grid grid-cols-2 gap-6">
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-4 rounded-xl border border-green-100 flex flex-col">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-gray-500">True Positives</span>
-                        <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-6">
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 p-3 sm:p-4 rounded-xl border border-green-100 flex flex-col">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1 gap-1">
+                        <span className="text-xs sm:text-sm text-gray-500">
+                          True Positives
+                        </span>
+                        <span className="text-xs font-medium text-green-700 bg-green-100 px-2 py-0.5 rounded-full self-start sm:self-auto">
                           60.4%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-green-700">451</div>
+                      <div className="text-xl sm:text-2xl font-bold text-green-700">
+                        451
+                      </div>
                       <div className="mt-2">
                         <div className="w-full bg-green-100 rounded-full h-2">
-                          <div className="bg-green-500 h-2 rounded-full" style={{ width: "60.4%" }}></div>
+                          <div
+                            className="bg-green-500 h-2 rounded-full"
+                            style={{ width: "60.4%" }}
+                          ></div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-red-50 to-rose-50 p-4 rounded-xl border border-red-100 flex flex-col">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-gray-500">False Positives</span>
-                        <span className="text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded-full">
+                    <div className="bg-gradient-to-br from-red-50 to-rose-50 p-3 sm:p-4 rounded-xl border border-red-100 flex flex-col">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1 gap-1">
+                        <span className="text-xs sm:text-sm text-gray-500">
+                          False Negatives
+                        </span>
+                        <span className="text-xs font-medium text-red-700 bg-red-100 px-2 py-0.5 rounded-full self-start sm:self-auto">
                           22.8%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-red-700">170</div>
+                      <div className="text-xl sm:text-2xl font-bold text-red-700">
+                        170
+                      </div>
                       <div className="mt-2">
                         <div className="w-full bg-red-100 rounded-full h-2">
-                          <div className="bg-red-500 h-2 rounded-full" style={{ width: "22.8%" }}></div>
+                          <div
+                            className="bg-red-500 h-2 rounded-full"
+                            style={{ width: "22.8%" }}
+                          ></div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-4 rounded-xl border border-amber-100 flex flex-col">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-gray-500">False Negatives</span>
-                        <span className="text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full">
-                          1.6 %
+                    <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-3 sm:p-4 rounded-xl border border-amber-100 flex flex-col">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1 gap-1">
+                        <span className="text-xs sm:text-sm text-gray-500">
+                          False Positives
+                        </span>
+                        <span className="text-xs font-medium text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full self-start sm:self-auto">
+                          1.6%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-amber-700">12</div>
+                      <div className="text-xl sm:text-2xl font-bold text-amber-700">
+                        12
+                      </div>
                       <div className="mt-2">
                         <div className="w-full bg-amber-100 rounded-full h-2">
-                          <div className="bg-amber-500 h-2 rounded-full" style={{ width: "1.6%" }}></div>
+                          <div
+                            className="bg-amber-500 h-2 rounded-full"
+                            style={{ width: "1.6%" }}
+                          ></div>
                         </div>
                       </div>
                     </div>
 
-                    <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-4 rounded-xl border border-blue-100 flex flex-col">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-gray-500">True Negatives</span>
-                        <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">
+                    <div className="bg-gradient-to-br from-blue-50 to-sky-50 p-3 sm:p-4 rounded-xl border border-blue-100 flex flex-col">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1 gap-1">
+                        <span className="text-xs sm:text-sm text-gray-500">
+                          True Negatives
+                        </span>
+                        <span className="text-xs font-medium text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full self-start sm:self-auto">
                           15.3%
                         </span>
                       </div>
-                      <div className="text-2xl font-bold text-blue-700">114</div>
+                      <div className="text-xl sm:text-2xl font-bold text-blue-700">
+                        114
+                      </div>
                       <div className="mt-2">
                         <div className="w-full bg-blue-100 rounded-full h-2">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: "15.3%" }}></div>
+                          <div
+                            className="bg-blue-500 h-2 rounded-full"
+                            style={{ width: "15.3%" }}
+                          ></div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-gray-50 border-t px-6 py-4">
-                  <div className="w-full flex justify-between items-center text-sm text-gray-500">
+                <div className="bg-gray-50 border-t px-3 sm:px-6 py-3 sm:py-4">
+                  <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-xs sm:text-sm text-gray-500">
                     <span>Total samples: 747</span>
                     <span className="flex items-center">
-                      <CheckCircle2 className="h-4 w-4 text-green-500 mr-1" />
+                      <CheckCircle2 className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 mr-1" />
                       76% overall accuracy
                     </span>
                   </div>
@@ -283,30 +398,37 @@ export default function ProjectInformation() {
         {activeTab === "detailed" && (
           <div className="mt-6">
             <div className="border-0 shadow-lg bg-white rounded-lg overflow-hidden">
-              <div className="p-6 border-b">
-                <h3 className="text-2xl font-bold">Detailed Analysis</h3>
-                <p className="text-gray-500">Comprehensive information about our breast cancer detection model</p>
+              <div className="p-3 sm:p-6 border-b">
+                <h3 className="text-xl sm:text-2xl font-bold">
+                  Detailed Analysis
+                </h3>
+                <p className="text-gray-500 text-sm sm:text-base">
+                  Comprehensive information about our breast cancer detection
+                  model
+                </p>
               </div>
-              <div className="p-6">
-                <div className="space-y-6">
+              <div className="p-3 sm:p-6">
+                <div className="space-y-4 sm:space-y-6">
                   <div className="border rounded-xl overflow-hidden">
                     <button
                       onClick={() => toggleSection("architecture")}
-                      className="w-full flex items-center justify-between p-4 text-left bg-gradient-to-r from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 transition-colors"
+                      className="w-full flex items-center justify-between p-3 sm:p-4 text-left bg-gradient-to-r from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 transition-colors"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3">
                         <div className="p-2 rounded-full bg-purple-200">
-                          <Brain className="h-5 w-5 text-purple-700" />
+                          <Brain className="h-4 w-4 sm:h-5 sm:w-5 text-purple-700" />
                         </div>
-                        <span className="font-medium text-purple-900">Model Architecture</span>
-                        <span className="inline-flex items-center rounded-md border border-purple-300 bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 ml-2">
+                        <span className="font-medium text-purple-900 text-sm sm:text-base">
+                          Model Architecture
+                        </span>
+                        <span className="inline-flex items-center rounded-md border border-purple-300 bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 ml-1 sm:ml-2">
                           Yolov8l
                         </span>
                       </div>
                       {expandedSection === "architecture" ? (
-                        <ChevronUp className="h-5 w-5 text-purple-500" />
+                        <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500 flex-shrink-0" />
                       ) : (
-                        <ChevronDown className="h-5 w-5 text-purple-500" />
+                        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-purple-500 flex-shrink-0" />
                       )}
                     </button>
 
@@ -319,10 +441,15 @@ export default function ProjectInformation() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 border-t border-purple-200 bg-white">
-                        <p className="text-gray-700">
-                          Our breast cancer detection model is based on the YOLOv8-L architecture, specifically designed for object detection tasks in medical imaging. The model was trained for <strong> 128 </strong> epochs using the VinDr-Mammo dataset,
-                          which includes <strong> 5,000</strong> annotated mammogram images from real breast cancer cases.
+                      <div className="p-3 sm:p-6 border-t border-purple-200 bg-white">
+                        <p className="text-gray-700 text-sm sm:text-base">
+                          Our breast cancer detection model is based on the
+                          YOLOv8-L architecture, specifically designed for
+                          object detection tasks in medical imaging. The model
+                          was trained for <strong> 128 </strong> epochs using
+                          the VinDr-Mammo dataset, which includes{" "}
+                          <strong> 5,000</strong> annotated mammogram images
+                          from real breast cancer cases.
                         </p>
                       </div>
                     </motion.div>
@@ -331,21 +458,23 @@ export default function ProjectInformation() {
                   <div className="border rounded-xl overflow-hidden">
                     <button
                       onClick={() => toggleSection("data")}
-                      className="w-full flex items-center justify-between p-4 text-left bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-colors"
+                      className="w-full flex items-center justify-between p-3 sm:p-4 text-left bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 transition-colors"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3">
                         <div className="p-2 rounded-full bg-blue-200">
-                          <Database className="h-5 w-5 text-blue-700" />
+                          <Database className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700" />
                         </div>
-                        <span className="font-medium text-blue-900">Data Sources</span>
-                        <span className="inline-flex items-center rounded-md border border-blue-300 bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 ml-2">
+                        <span className="font-medium text-blue-900 text-sm sm:text-base">
+                          Data Sources
+                        </span>
+                        <span className="inline-flex items-center rounded-md border border-blue-300 bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700 ml-1 sm:ml-2">
                           5,000 Images
                         </span>
                       </div>
                       {expandedSection === "data" ? (
-                        <ChevronUp className="h-5 w-5 text-blue-500" />
+                        <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 flex-shrink-0" />
                       ) : (
-                        <ChevronDown className="h-5 w-5 text-blue-500" />
+                        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 flex-shrink-0" />
                       )}
                     </button>
 
@@ -358,16 +487,16 @@ export default function ProjectInformation() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 border-t border-blue-200 bg-white">
-                        <p className="text-gray-700">
-                          <p>
-                            The <strong>VinDr-Mammo</strong> dataset was used, containing 5,000 mammograms with double readings and arbitration
-                            by a third radiologist to ensure diagnostic accuracy.
-                            From this dataset, <strong>1,659 cases</strong> were selected: <strong>1,363</strong> with masses or calcifications rated BI-RADS &gt; 3,
-                            and <strong>296</strong> with no detectable abnormalities.
-                          </p>
-
-
+                      <div className="p-3 sm:p-6 border-t border-blue-200 bg-white">
+                        <p className="text-gray-700 text-sm sm:text-base">
+                          The <strong>VinDr-Mammo</strong> dataset was used,
+                          containing 5,000 mammograms with double readings and
+                          arbitration by a third radiologist to ensure
+                          diagnostic accuracy. From this dataset,{" "}
+                          <strong>1,659 cases</strong> were selected:{" "}
+                          <strong>1,363</strong> with masses or calcifications
+                          rated BI-RADS &gt; 3, and <strong>296</strong> with no
+                          detectable abnormalities.
                         </p>
                       </div>
                     </motion.div>
@@ -376,21 +505,23 @@ export default function ProjectInformation() {
                   <div className="border rounded-xl overflow-hidden">
                     <button
                       onClick={() => toggleSection("validation")}
-                      className="w-full flex items-center justify-between p-4 text-left bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 transition-colors"
+                      className="w-full flex items-center justify-between p-3 sm:p-4 text-left bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 transition-colors"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3">
                         <div className="p-2 rounded-full bg-green-200">
-                          <CheckCircle2 className="h-5 w-5 text-green-700" />
+                          <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-700" />
                         </div>
-                        <span className="font-medium text-green-900">Validation Process</span>
-                        <span className="inline-flex items-center rounded-md border border-green-300 bg-green-100 px-2 py-1 text-xs font-medium text-green-700 ml-2">
+                        <span className="font-medium text-green-900 text-sm sm:text-base">
+                          Validation Process
+                        </span>
+                        <span className="inline-flex items-center rounded-md border border-green-300 bg-green-100 px-2 py-1 text-xs font-medium text-green-700 ml-1 sm:ml-2">
                           Split
                         </span>
                       </div>
                       {expandedSection === "validation" ? (
-                        <ChevronUp className="h-5 w-5 text-green-500" />
+                        <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
                       ) : (
-                        <ChevronDown className="h-5 w-5 text-green-500" />
+                        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-green-500 flex-shrink-0" />
                       )}
                     </button>
 
@@ -403,16 +534,15 @@ export default function ProjectInformation() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 border-t border-green-200 bg-white">
-                        <p className="text-gray-700">
-                          <p>
-                            The dataset was split into <strong>70%</strong> for training, <strong>15%</strong>
-                            for validation during training, and <strong>15%</strong> for final testing. 
-                            The validation set was used to tune model performance and prevent overfitting, 
-                            while the test set was reserved for evaluating the model's generalization after training.
-                          </p>
-
-                          .
+                      <div className="p-3 sm:p-6 border-t border-green-200 bg-white">
+                        <p className="text-gray-700 text-sm sm:text-base">
+                          The dataset was split into <strong>70%</strong> for
+                          training, <strong>15%</strong>
+                          for validation during training, and{" "}
+                          <strong>15%</strong> for final testing. The validation
+                          set was used to tune model performance and prevent
+                          overfitting, while the test set was reserved for
+                          evaluating the model's generalization after training.
                         </p>
                       </div>
                     </motion.div>
@@ -421,21 +551,23 @@ export default function ProjectInformation() {
                   <div className="border rounded-xl overflow-hidden">
                     <button
                       onClick={() => toggleSection("limitations")}
-                      className="w-full flex items-center justify-between p-4 text-left bg-gradient-to-r from-amber-50 to-amber-100 hover:from-amber-100 hover:to-amber-200 transition-colors"
+                      className="w-full flex items-center justify-between p-3 sm:p-4 text-left bg-gradient-to-r from-amber-50 to-amber-100 hover:from-amber-100 hover:to-amber-200 transition-colors"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3">
                         <div className="p-2 rounded-full bg-amber-200">
-                          <AlertTriangle className="h-5 w-5 text-amber-700" />
+                          <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-amber-700" />
                         </div>
-                        <span className="font-medium text-amber-900">Limitations</span>
-                        <span className="inline-flex items-center rounded-md border border-amber-300 bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700 ml-2">
+                        <span className="font-medium text-amber-900 text-sm sm:text-base">
+                          Limitations
+                        </span>
+                        <span className="inline-flex items-center rounded-md border border-amber-300 bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700 ml-1 sm:ml-2">
                           Support Tool
                         </span>
                       </div>
                       {expandedSection === "limitations" ? (
-                        <ChevronUp className="h-5 w-5 text-amber-500" />
+                        <ChevronUp className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 flex-shrink-0" />
                       ) : (
-                        <ChevronDown className="h-5 w-5 text-amber-500" />
+                        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-amber-500 flex-shrink-0" />
                       )}
                     </button>
 
@@ -448,11 +580,13 @@ export default function ProjectInformation() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="p-6 border-t border-amber-200 bg-white">
-                        <p className="text-gray-700">
-                          The current model is designed as a support tool for radiologists and should not be used as the
-                          sole diagnostic method. It performs best on standard mammogram images and may have reduced
-                          accuracy on uncommon presentations.
+                      <div className="p-3 sm:p-6 border-t border-amber-200 bg-white">
+                        <p className="text-gray-700 text-sm sm:text-base">
+                          The current model is designed as a support tool for
+                          radiologists and should not be used as the sole
+                          diagnostic method. It performs best on standard
+                          mammogram images and may have reduced accuracy on
+                          uncommon presentations.
                         </p>
                       </div>
                     </motion.div>
@@ -464,50 +598,59 @@ export default function ProjectInformation() {
         )}
       </div>
 
-      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 p-6 rounded-xl border border-gray-200 shadow-md">
-        <h3 className="text-xl font-bold mb-4 text-gray-800">Model Validation Status</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+      <div className="bg-gradient-to-r from-gray-50 via-white to-gray-50 p-3 sm:p-6 rounded-xl border border-gray-200 shadow-md">
+        <h3 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-gray-800">
+          Model Validation Status
+        </h3>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm flex items-center gap-2 sm:gap-3">
+            <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
             </div>
             <div>
-              <div className="text-sm text-gray-500">Training</div>
-              <div className="font-medium">Complete</div>
+              <div className="text-xs sm:text-sm text-gray-500">Training</div>
+              <div className="font-medium text-sm sm:text-base">Complete</div>
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-              <CheckCircle2 className="h-5 w-5 text-green-600" />
+          <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm flex items-center gap-2 sm:gap-3">
+            <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+              <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
             </div>
             <div>
-              <div className="text-sm text-gray-500">Validation</div>
-              <div className="font-medium">Complete</div>
+              <div className="text-xs sm:text-sm text-gray-500">Validation</div>
+              <div className="font-medium text-sm sm:text-base">Complete</div>
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-              <TrendingUp className="h-5 w-5 text-blue-600" />
+          <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm flex items-center gap-2 sm:gap-3">
+            <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
             </div>
             <div>
-              <div className="text-sm text-gray-500">Clinical Testing</div>
-              <div className="font-medium">In Progress</div>
+              <div className="text-xs sm:text-sm text-gray-500">
+                Clinical Testing
+              </div>
+              <div className="font-medium text-sm sm:text-base">
+                In Progress
+              </div>
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-lg shadow-sm flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
-              <AlertTriangle className="h-5 w-5 text-gray-500" />
+          <div className="bg-white p-3 sm:p-4 rounded-lg shadow-sm flex items-center gap-2 sm:gap-3">
+            <div className="h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+              <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
             </div>
             <div>
-              <div className="text-sm text-gray-500">Regulatory</div>
-              <div className="font-medium">Pending</div>
+              <div className="text-xs sm:text-sm text-gray-500">Regulatory</div>
+              <div className="font-medium text-sm sm:text-base">Pending</div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      <ImageModal />
     </div>
-  )
+  );
 }
