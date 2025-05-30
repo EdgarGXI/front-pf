@@ -36,7 +36,7 @@ const Chatbot = () => {
 
   // Función para crear una nueva sesión
   const createNewSession = async () => {
-    //https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/new_session/
+    //http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/new_session/
     try {
       const response = await fetch(
         "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/new_session/",
@@ -67,7 +67,7 @@ const Chatbot = () => {
   const loadSessionHistory = async (sessionId) => {
     try {
       const response = await fetch(
-        // http://localhost:8000/ https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/sessions/${sessionId}/messages/
+        // http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/sessions/${sessionId}/messages/
         `https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/sessions/${sessionId}/messages/`,
         {
           method: "GET",
@@ -107,7 +107,7 @@ const Chatbot = () => {
 
     try {
       const response = await fetch(
-        //https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/sessions/${sessionId}/
+        //http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/sessions/${sessionId}/
         `https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/sessions/${sessionId}/`,
         {
           method: "DELETE",
@@ -162,7 +162,7 @@ const Chatbot = () => {
         // Limpiar la sesión del backend
         try {
           await fetch(
-            //https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/sessions/${sessionId}/
+            //http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/sessions/${sessionId}/
             `https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/sessions/${sessionId}/`,
             {
               method: "DELETE",
@@ -306,7 +306,7 @@ const Chatbot = () => {
       // First check if the API is running
       try {
         const healthCheck = await fetch(
-          // http://localhost:8000/ https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/
+          // http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net
           "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/",
           {
             method: "GET",
@@ -328,7 +328,7 @@ const Chatbot = () => {
       // Send the image to your FastAPI endpoint
       console.log("Sending image to API...");
       const response = await fetch(
-        // http://localhost:8000/ https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/
+        // http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/predict/
         "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/",
         {
           method: "POST",
@@ -526,7 +526,7 @@ const Chatbot = () => {
         }
 
         const apiResponse = await fetch(
-          // http://localhost:8000/ https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/
+          // http://planb-ekdza2badndte0aa.eastus2-01.azurewebsites.net/predict/
           "https://apibeacon-fbb7bxf6fdbkd5dk.eastus2-01.azurewebsites.net/predict/",
           {
             method: "POST",
